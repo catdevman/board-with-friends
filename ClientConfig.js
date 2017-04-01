@@ -1,8 +1,6 @@
 var igeClientConfig = {
 	include: [
 		/* Your custom game JS scripts */
-		//'./gameClasses/MyClassFile.js',
-
 		'gameClasses/BoardEntity.js',
 		'gameClasses/PieceEntity.js',
 
