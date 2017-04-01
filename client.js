@@ -51,13 +51,13 @@ var Client = IgeClass.extend({
 							// is created because of the incoming stream data
 							.stream.on('entityCreated', function (entity) {
 								self.log('Stream entity created with ID: ' + entity.id());
-                                self.entityArray[entity.id()] = entity;
-                                if( entity instanceof PieceEntity){
-                                    console.log( entity );
-                                    entity.mouseUp( function(){
-                                            console.log( this );
-                                    });
-                                }
+                self.entityArray[entity.id()] = entity;
+                if( entity instanceof PieceEntity){
+									console.log( entity._type );
+                  entity.mouseUp( function(){
+                          console.log( this );
+                  });
+                }
 							});
 
 						// Load the base scene data
