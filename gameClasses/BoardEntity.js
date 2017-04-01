@@ -5,6 +5,7 @@ var BoardEntity = IgeEntity.extend({
 		IgeEntity.prototype.init.call(this);
 
 		if( !ige.isServer ){
+            // Create 81 Locations that mount to the board and have a background texture of board pattern
 			this.texture(ige.client.textures.gameBoard)
 			    .width(540)
 				.height(540);

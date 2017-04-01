@@ -4,16 +4,28 @@ var Server = IgeClass.extend({
 
 	init: function (options) {
 		var self = this;
+        self.players = [];
+        self.games = [];
 
 		// Add the networking component
-		ige.addComponent(IgeSocketIoComponent)
+		ige.addComponent(IgeNetIoComponent)
 			// Start the network server
 			.network.start(2000, function () {
 				// Networking has started so start the game engine
 				ige.start(function (success) {
 					// Check if the engine started successfully
 					if (success) {
-						ige.network.on('connect', function () {});
+						ige.network.on('connect', function ( socket ) {
+                            var clientId = socket.id;
+                            if( !self.games ){
+
+                            var game = new BWFGame();
+                            game.addPlayer( clientId );
+                                self.games.push( game );
+                            }
+                            self.players.push( clientId );
+                            console.log()
+                        });
 						ige.network.on('disconnect', function () {});
 
 						// Add the network stream component
@@ -23,19 +35,6 @@ var Server = IgeClass.extend({
 
 						// Accept incoming network connections
 						ige.network.acceptConnections(true);
-
-						// Load the base scene data
-						ige.addGraph('IgeBaseScene');
-
-						var boardEntity = new BoardEntity()
-						    .id('boardEntity')
-							.streamMode(1)
-							.mount(ige.$('baseScene'));
-
-						var p1Circle = new PieceEntity()
-							.streamMode(1)
-							.setType("p1_circle")
-							.mount(ige.$('boardEntity'));
 
 					}
 				});

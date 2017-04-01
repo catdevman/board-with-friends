@@ -2,7 +2,8 @@ var config = {
 	include: [
 		//{name: 'MyClassName', path: './gameClasses/MyClassFileName'},
 		{name: 'BoardEntity', path: 'gameClasses/BoardEntity'},
-		{name: 'PieceEntity', path: 'gameClasses/PieceEntity'}
+		{name: 'PieceEntity', path: 'gameClasses/PieceEntity'},
+		{name: 'BWFGame', path: 'gameClasses/BWFGame'}
 	]
 };
 

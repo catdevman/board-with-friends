@@ -7,9 +7,10 @@ var Client = IgeClass.extend({
 
 		// Load our textures
 		var self = this;
+        self.entityArray = [];
 
 		// Enable networking
-		ige.addComponent(IgeSocketIoComponent);
+		ige.addComponent(IgeNetIoComponent);
 
 		// Create the HTML canvas
 		ige.createFrontBuffer(true);
@@ -50,11 +51,18 @@ var Client = IgeClass.extend({
 							// is created because of the incoming stream data
 							.stream.on('entityCreated', function (entity) {
 								self.log('Stream entity created with ID: ' + entity.id());
-
+                                self.entityArray[entity.id()] = entity;
+                                if( entity instanceof PieceEntity){
+                                    console.log( entity );
+                                    entity.mouseUp( function(){
+                                            console.log( this );
+                                    });
+                                }
 							});
 
 						// Load the base scene data
 						ige.addGraph('IgeBaseScene');
+
 					});
 				}
 			});
