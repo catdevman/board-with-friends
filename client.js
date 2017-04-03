@@ -7,7 +7,8 @@ var Client = IgeClass.extend({
 
 		// Load our textures
 		var self = this;
-        self.entityArray = [];
+        self.entities = [];
+				self.pieceSelected = false;
 
 		// Enable networking
 		ige.addComponent(IgeNetIoComponent);
@@ -29,7 +30,9 @@ var Client = IgeClass.extend({
 				p2_square_x: new IgeTexture('./assets/p2_square_x.png'),
 				p2_square: new IgeTexture('./assets/p2_square.png'),
 				p2_movable_area: new IgeTexture('./assets/p2_movable_area.png')
-			}
+			},
+			squareHighlight: new IgeTexture('./assets/selected_square_piece.png'),
+			circleHighlight: new IgeTexture('./assets/selected_circle_piece.png')
 
 		};
 
@@ -50,14 +53,18 @@ var Client = IgeClass.extend({
 							// Create a listener that will fire whenever an entity
 							// is created because of the incoming stream data
 							.stream.on('entityCreated', function (entity) {
-								self.log('Stream entity created with ID: ' + entity.id());
-                self.entityArray[entity.id()] = entity;
+                self.entities.push(entity);
                 if( entity instanceof PieceEntity){
-									console.log( entity._type );
                   entity.mouseUp( function(){
-                          console.log( this );
+										if(!this._highlighted && !self.pieceSelected){
+											ige.client.unhighlightPieces();
+											this.highlight();
+										}
                   });
                 }
+								else if (entity instanceof BoardEntity ) {
+									// Check if current players piece is selected and location is valid move then send move to server
+								}
 							});
 
 						// Load the base scene data
@@ -67,6 +74,15 @@ var Client = IgeClass.extend({
 				}
 			});
 		});
+	},
+	unhighlightPieces: function(){
+		for( i = 0; i < this.entities.length; i++){
+			var entity = this.entities[i]
+			console.log( entity );
+			if( entity instanceof PieceEntity){
+				entity.unhighlight();
+			}
+		}
 	}
 });
 

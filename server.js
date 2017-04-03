@@ -28,6 +28,7 @@ var Server = IgeClass.extend({
 						ige.network.on('disconnect',
 														function ( socket ) {
                             	var clientId = socket.id;
+															// Need to remove player from game.... hmm?
 														}
 												);
 
@@ -39,6 +40,7 @@ var Server = IgeClass.extend({
 
 
 				    ige.addGraph('IgeBaseScene');
+
 						if( !self.game ){
 							var game = new BWFGame();
 							self.game = game;

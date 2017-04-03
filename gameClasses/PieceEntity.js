@@ -4,46 +4,24 @@ var PieceEntity = IgeEntity.extend({
 	init: function ( options ) {
 		IgeEntity.prototype.init.call(this);
         var self = this;
-            if( !ige.isServer ){
-                this.setType( options.type );
-            } else{
-                self._type = options.type;
-            }
-						this.streamSections(['type']);
+        if( !ige.isServer ){
+            this.setType( options.type );
+						console.log( this );
+						this.highlightEntity = new IgeEntity()
+							.texture( this._type.toLowerCase().includes("square") ? ige.client.textures.squareHighlight : ige.client.textures.circleHighlight)
+							.hide()
+							.width(50)
+							.height(50)
+							.opacity(0.6)
+							.mount(this);
+        } else{
+            self._type = options.type;
+        }
 
 	},
 	streamCreateData: function () {
 		return {type: this._type};
 	},
-	/**
-	 * Override the default IgeEntity class streamSectionData() method
-	 * so that we can check for the custom1 section and handle how we deal
-	 * with it.
-	 * @param {String} sectionId A string identifying the section to
-	 * handle data get / set for.
-	 * @param {*=} data If present, this is the data that has been sent
-	 * from the server to the client for this entity.
-	 * @return {*}
-	 */
-	streamSectionData: function (sectionId, data) {
-		// Check if the section is one that we are handling
-		if (sectionId === 'type') {
-			// Check if the server sent us data, if not we are supposed
-			// to return the data instead of set it
-			if (data) {
-				// We have been given new data!
-				this._type = data;
-			} else {
-				// Return current data
-				return this._type;
-			}
-		} else {
-			// The section was not one that we handle here, so pass this
-			// to the super-class streamSectionData() method - it handles
-			// the "transform" section by itself
-			return IgeEntity.prototype.streamSectionData.call(this, sectionId, data);
-		}
-	}
 });
 
 PieceEntity.prototype.setType = function( type ){
@@ -61,6 +39,10 @@ PieceEntity.prototype.setTexture = function( texture ){
 }
 
 PieceEntity.prototype.highlight = function () {
+	this.highlightEntity.show();
+};
+PieceEntity.prototype.unhighlight = function () {
+	this.highlightEntity.hide();
 };
 
 if (typeof(module) !== 'undefined' && typeof(module.exports) !== 'undefined') { module.exports = PieceEntity; }
